@@ -46,7 +46,7 @@ public class controladorMenu implements ActionListener {
             MP.setVisible(false);
         }
         if (e.getSource().equals(MP.Jgrafica)) {
-            MenuGra M = new MenuGra();
+            MenuGra M = new MenuGra(MP);
 
             MP.setVisible(false);
         }

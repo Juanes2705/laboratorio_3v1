@@ -19,12 +19,13 @@ import javax.swing.border.EtchedBorder;
 
 
 public class MenuGra extends JFrame {
+    public MenuPrincipal MP;
+    JButton jbGrafNivel, jbGraTurno, jbSalir,jbformacion,Jvolver;
 
-    JButton jbGrafNivel, jbGrafNivelTipo, jbSalir;
-
-    public MenuGra() {
+    public MenuGra(MenuPrincipal MP) {
         super("Menu de Graficas");
-        setSize(550, 320);
+        this.MP = MP;
+        setSize(700, 420);
         setLayout(null);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -52,7 +53,7 @@ public class MenuGra extends JFrame {
         add(jl);
 
         ImageIcon im1 = new ImageIcon(getClass().getResource("imagenes/pie_chart.png"));
-        jbGrafNivel = new JButton("Nivel de estudios", im1);
+        jbGrafNivel = new JButton("Idiomas", im1);
         jbGrafNivel.setBounds(30, 80, 158, 180);
         jbGrafNivel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jbGrafNivel.setBorderPainted(false);
@@ -63,31 +64,59 @@ public class MenuGra extends JFrame {
         jbGrafNivel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                evento_jbGrafNivel();
+                evento_jbGraIdioma();
             }
         });
         add(jbGrafNivel);
 
         ImageIcon im2 = new ImageIcon(getClass().getResource("imagenes/barras.png"));
-        jbGrafNivelTipo = new JButton("<html><center>Nivel de estudios<br>x Tipo</html>", im2);
-        jbGrafNivelTipo.setBounds(190, 80, 158, 180);
-        jbGrafNivelTipo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        jbGrafNivelTipo.setBorderPainted(false);
-        jbGrafNivelTipo.setContentAreaFilled(false);
-        jbGrafNivelTipo.setFocusPainted(false);
-        jbGrafNivelTipo.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbGrafNivelTipo.setVerticalTextPosition(SwingConstants.BOTTOM);
-        jbGrafNivelTipo.addActionListener(new ActionListener() {
+        jbGraTurno = new JButton("Turnos", im2);
+        jbGraTurno.setBounds(190, 80, 158, 180);
+        jbGraTurno.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jbGraTurno.setBorderPainted(false);
+        jbGraTurno.setContentAreaFilled(false);
+        jbGraTurno.setFocusPainted(false);
+        jbGraTurno.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbGraTurno.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbGraTurno.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                evento_jbGrafNivelTipo();
+                evento_jbGraTurno();
             }
         });
-        add(jbGrafNivelTipo);
+        add(jbGraTurno);
+        
+        ImageIcon im3 = new ImageIcon(getClass().getResource("imagenes/icons8-barras-96.png"));
+        jbformacion = new JButton("Formacion", im3);
+        jbformacion.setBounds(350, 80, 158, 180);
+        jbformacion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jbformacion.setBorderPainted(false);
+        jbformacion.setContentAreaFilled(false);
+        jbformacion.setFocusPainted(false);
+        jbformacion.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbformacion.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbformacion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                evento_jbGraforma();
+            }
+        });
+        add(jbformacion);
+        
+        Jvolver = new JButton("Volver al menú");
+        Jvolver.setBounds(510, 250, 150, 30);
+        Jvolver.addActionListener(new ActionListener() {
+        @Override
+            public void actionPerformed(ActionEvent e) {
+               dispose(); // Cierra la ventana actual
+               MP.setVisible(true);  
+            }
+        });
+        add(Jvolver);
 
-        ImageIcon im3 = new ImageIcon(getClass().getResource("imagenes/exit.png"));
-        jbSalir = new JButton("Salir", im3);
-        jbSalir.setBounds(350, 80, 158, 180);
+        ImageIcon im4 = new ImageIcon(getClass().getResource("imagenes/exit.png"));
+        jbSalir = new JButton("Salir", im4);
+        jbSalir.setBounds(510, 80, 158, 180);
         jbSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jbSalir.setBorderPainted(false);
         jbSalir.setContentAreaFilled(false);
@@ -103,12 +132,15 @@ public class MenuGra extends JFrame {
         add(jbSalir);
     }
 
-    private void evento_jbGrafNivel() {
-        //Graf_general gn = new Graf_general();
+    private void evento_jbGraIdioma() {
+        Graf_Idioma gn = new Graf_Idioma();
     }
 
-    public void evento_jbGrafNivelTipo() {
+    public void evento_jbGraTurno() {
         Graf_informe gnt = new Graf_informe();
+    }
+    public void evento_jbGraforma(){
+        Graf_formacion gf = new Graf_formacion();
     }
 
     private void evento_salir() {
@@ -122,7 +154,5 @@ public class MenuGra extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        MenuGra mg = new MenuGra();
-    }
+    
 }

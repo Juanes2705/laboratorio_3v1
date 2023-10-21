@@ -110,6 +110,7 @@ public class consultaPK extends JFrame {
         add(jid);
 
         Jid = new JTextField();
+        Jid.setDocument(new ListadorCaracteres(Jid, 5, 0));
         Jid.setBounds(160, 50, 120, 30);
         add(Jid);
 

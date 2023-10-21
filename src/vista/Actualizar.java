@@ -67,6 +67,7 @@ public class Actualizar extends JFrame {
         add(Jid);
 
         Jinfo = new JTextField();
+        Jid.setDocument(new ListadorCaracteres(Jid, 5, 0));
         Jinfo.setBounds(200, 150, 120, 30);
         add(Jinfo);
 

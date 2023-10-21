@@ -72,7 +72,7 @@ public class VentanaLogin extends JFrame{
         
         jpPassw = new JPasswordField();
         jpPassw.setBounds(120, 140, 150, 30);
-        jpPassw.setEchoChar(' ');
+        jpPassw.setEchoChar('*');
         jpPassw.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

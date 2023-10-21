@@ -1,7 +1,6 @@
 
 package vista;
 
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
@@ -35,10 +34,20 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+import javax.swing.JFrame;
+import java.awt.Color;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 
 
-
-public class Graf_informe extends JFrame{
+public class Graf_formacion extends JFrame{
 
     JButton jbPDF; 
     JLabel jlMensaje; 
@@ -47,9 +56,9 @@ public class Graf_informe extends JFrame{
     int contadores[] = new int[3];
     
     
-    public Graf_informe() {
+    public Graf_formacion() {
  
-        super("Grafico - De Turno ");
+        super("Grafico - De Formacion ");
         setSize(800, 580);
         setLayout(null);
         setResizable(false);
@@ -87,82 +96,84 @@ public class Graf_informe extends JFrame{
     }
 
     public void crearGrafico() {        
-        if(!cant_X_turno("GuardarDatos.csv")){       
-            DefaultPieDataset data = new DefaultPieDataset();
-            data.setValue("Mañana", contadores[0]);
-            data.setValue("Tarde", contadores[1]);
-            data.setValue("Noche", contadores[2]);
-            
+        if (!cant_X_turno("GuardarDatos.csv")) {
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-            chart = ChartFactory.createPieChart3D("Nivel de Turno", data,true,true,false);
+            dataset.addValue(contadores[0], "Bachiller", "Nivel de Turno");
+            dataset.addValue(contadores[1], "Pregrado", "Nivel de Turno");
+            dataset.addValue(contadores[2], "Posgrado", "Nivel de Turno");
+
+            chart = ChartFactory.createStackedBarChart3D(
+                    "Nivel de Formacion", 
+                    "Categoría",
+                    "Cantidad", 
+                    dataset,
+                    PlotOrientation.VERTICAL, 
+                    true, true, false);
+
             
-   
-            TextTitle subtitle1 = new TextTitle("Turnos de trabajo");
+            TextTitle subtitle1 = new TextTitle("Formacion  basica");
             chart.addSubtitle(subtitle1);
-            
-           
-            PiePlot pieplot = (PiePlot) chart.getPlot();  
-            pieplot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));   
-            
-           
+
             ChartPanel panel = new ChartPanel(chart, false);
             panel.setBounds(10, 20, 760, 450);
             add(panel);
-            
+
             jbPDF.setVisible(true);
         }
     }
     
     public boolean cant_X_turno(String fileName) {
-        FileReader fr = null; 
-        boolean error = false; 
+    FileReader fr = null;
+    boolean error = false;
+
+
+
+    try {
+        fr = new FileReader(fileName);
+    } catch (IOException e) {
+        error = true;
+        jlMensaje.setText("Error al tratar de abrir el archivo '" + fileName + "'");
+    }
+
+    if (!error) {
+        BufferedReader br = new BufferedReader(fr);
+        String linea = "";
+        String tokens[];
 
         try {
-            fr = new FileReader(fileName);
-        } catch (IOException e) {
-            error = true;
-            jlMensaje.setText("Error al tratar de abrir el archivo '" + fileName + "'");
-        }
-
-        if (!error) {
-            BufferedReader br = new BufferedReader(fr);
-            String linea = "";
-            String tokens[];
-
-            try {
-                while ((linea = br.readLine()) != null) {
-                    
-                    tokens = linea.split(";");
-                    
-                    switch(tokens[2]){
-                        case "Mañana":       contadores[0]++; break;
-                        case "Tarde":     contadores[1]++; break;
-                        case "Noche": contadores[2]++; break;
+            while ((linea = br.readLine()) != null) {
+                tokens = linea.split(";");
+        
+                switch(tokens[4]){
+                        case "Bachiller":       contadores[0]++; break;
+                        case "Pregrado":     contadores[1]++; break;
+                        case "Posgrado": contadores[2]++; break;
                         
                     }
-                }
-            } catch (IOException e) {
-                jlMensaje.setText("Error al tratar de leer el archivo '" + fileName + "'");
             }
-
-            try {
-                fr.close();
-            } catch (IOException e) {
-                jlMensaje.setText("Error al tratar de cerrar el archivo '" + fileName + "'");
-            }
+        } catch (IOException e) {
+            jlMensaje.setText("Error al tratar de leer el archivo '" + fileName + "'");
         }
-        
-        return error;
+
+        try {
+            fr.close();
+        } catch (IOException e) {
+            jlMensaje.setText("Error al tratar de cerrar el archivo '" + fileName + "'");
+        }
+    }
+
+    return error;
     }
     
     private void evento_jbPDF() {
         try {
             ChartUtilities.saveChartAsPNG(
             
-                    new File("Grafico-Turno (Fac Ing).png"), 
-                    chart, //la grafica
-                    760,//ancho 
-                    450);//alto
+                    new File("Grafico-Formacion (Fac Ing).png"), 
+                    chart,
+                    760,
+                    450);
             
             crearPDF();
 
@@ -178,7 +189,7 @@ public class Graf_informe extends JFrame{
         try {
            
             PdfWriter writer = PdfWriter.getInstance(document, 
-                    new FileOutputStream("Grafico-Turno (Fac Ing).pdf"));
+                    new FileOutputStream("Grafico-Formacion (Fac Ing).pdf"));
 
            
             document.open();
@@ -191,9 +202,9 @@ public class Graf_informe extends JFrame{
             g.setFont(font1);
 
             g.setColor(Color.RED);
-            g.drawString("Informe de Turno", 165, 30);
+            g.drawString("Informe de la Formacion", 165, 30);
                                     
-            ImageIcon img1 = new ImageIcon("Grafico-Turno (Fac Ing).png");
+            ImageIcon img1 = new ImageIcon("Grafico-Formacion (Fac Ing).png");
             g.drawImage(img1.getImage(), 40, 60, 520, 320, null);
             
         } catch (DocumentException de) {
@@ -210,17 +221,17 @@ public class Graf_informe extends JFrame{
     
     private void pregunta() {
         int res = JOptionPane.showConfirmDialog(this, 
-            "Se creo el archivo 'Grafico-Turno (Fac Ing).pdf' en la carpeta del proyecto.\n\n¿Desea ver el archivo?",
+            "Se creo el archivo 'Grafico-Formacion (Fac Ing).pdf' en la carpeta del proyecto.\n\n¿Desea ver el archivo?",
             "Confirmación",
             JOptionPane.YES_NO_OPTION);
         
         if(res == JOptionPane.YES_OPTION){
-            File fl = new File("Grafico-Turno (Fac Ing).pdf");// cargar el documento PDF
+            File fl = new File("Grafico-Formacion (Fac Ing).pdf");// cargar el documento PDF
             try {
                 Desktop.getDesktop().open(fl);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                    "Error al tratar de abrir el archivo 'Grafico-Turno (Fac Ing).pdf'");
+                    "Error al tratar de abrir el archivo 'Grafico-Formacion (Fac Ing).pdf'");
             }
         }
     }

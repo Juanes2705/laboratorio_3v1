@@ -61,6 +61,7 @@ public class Administrador extends JFrame {
         add(jid);
         
         Jid =new JTextField();
+        Jid.setDocument(new ListadorCaracteres(Jid, 5, 0));
         Jid.setBackground(Color.LIGHT_GRAY);
         Jid.setFont(new Font("Arial", Font.PLAIN, 14));
         Jid.setBounds(50, 80, 120, 30);

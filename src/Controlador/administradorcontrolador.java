@@ -97,7 +97,10 @@ public class administradorcontrolador implements ActionListener {
     boolean error = false;
     try {
         
-        fw = new FileWriter("C:"+File.separator+"Users"+File.separator+"juane"+File.separator+"GuardarDatos.csv", true);
+        fw = new FileWriter("C:"+File.separator+
+                "prueba"+File.separator+
+                "laboratorio_3"+File.separator+
+                "GuardarDatos.csv", true);
         
 
         bw = new BufferedWriter(fw);
